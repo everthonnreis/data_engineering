@@ -1,0 +1,14 @@
+boto3==1.20.24
+pandas==1.2.4
+gspread==3.7.0
+cx-Oracle==8.2.0
+gspread-dataframe
+oauth2client
+pandas_oracle
+beautifulsoup4
+pyarrow
+s3fs==2022.01.0
+xlrd
+openpyxl
+configparser
+python-dotenv
