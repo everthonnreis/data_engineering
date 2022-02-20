@@ -2,13 +2,13 @@ import os
 import boto3
 import pandas as pd
 from pathlib import Path
-from configparser import ConfigParser
 from dotenv import load_dotenv
 from os import getenv
 
 load_dotenv("/home/ubuntu/.env")
 
 class ConfigFunctions:
+    #Converting the xls file using LibreOffice to access the pivot table cache
     @staticmethod
     def convert_file(file_origin, bucket_name, logger):
         logger.info('Converting xls file to ods...')
@@ -18,6 +18,7 @@ class ConfigFunctions:
         else:
             logger.error(f'Error in `{cmd}`')
 
+    # Upload the Converted File to an Amazon S3 Bucket
     @staticmethod
     def upload_file_s3(filename: str, bucket_path: str, bucket: str, logger=None):
         client = boto3.client('s3', 
@@ -26,7 +27,6 @@ class ConfigFunctions:
                       aws_secret_access_key=getenv("AWS_SECRET_ACCESS_KEY"))
         pname = Path(filename).name
         directory_name = bucket_path + f"{pname}"
-
         bucket_path = directory_name 
 
         with open(filename, "rb") as f:
@@ -39,6 +39,8 @@ class ConfigFunctions:
                     logger.error(f"unable to upload file {filename} {e.args}")
                 else:
                     print(f"unable to upload file {filename} {e.args}")
+
+    # Convert dataframe to parquet, remove accented columns and send to s3
     @staticmethod
     def convert_parquet(filename, sheet, file_origin, bucket, bucket_name, logger):
         df = pd.read_excel(f'{bucket_name}{file_origin}', sheet_name=sheet)
