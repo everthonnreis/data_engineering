@@ -20,6 +20,7 @@ The use of OCI was for Apache Airflow services in the Docker container and proce
 * [Docker-compose](https://docs.docker.com/compose/install/)
 * libreoffice
 * Installing the libraries in the `requirements.txt` file in the `utils_lib` folder
+* [Docker compose file provided by Apache](https://airflow.apache.org/docs/apache-airflow/stable/docker-compose.yaml) 
 
 ## Running
 The pipeline operation is the execution of the extract and transform scripts by airflow through the `sshOperator`.
