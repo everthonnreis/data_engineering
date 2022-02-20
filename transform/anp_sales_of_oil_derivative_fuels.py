@@ -4,10 +4,13 @@ from pyspark.sql.types import *
 from pyspark.sql import functions as F
 from datetime import datetime
 
+# Declaration of variables
 job_name = 'Transform ANP Fuel Sales'
 today = datetime.now().strftime("%Y/%m/%d")
 path_load_s3 = f"s3://''/raw/anp_fuel_sales/{today}/sales_of_oil_derivative_fuels.parquet"
 path_write_s3 = f"s3://''/transform/anp_fuel_sales/sales_of_oil_derivative_fuels/"
+
+# Set SparkSession configuration
 spark = (
       SparkSession.builder 
      .master("yarn") 
@@ -18,12 +21,19 @@ spark = (
      .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
      .getOrCreate()
      )
+
+#Reads parquet files from the raw directory on s3
 df = spark.read.format("parquet").load(path_load_s3)
 df = df.drop('TOTAL')
 
+# Defines the columns that will not be unpivoted
 fixed_columns = ['combustivel','ano','regiao','estado']
+
+#Convert column names to lowercase
 for col in df.columns:
     df = df.withColumnRenamed(col, (col).lower())
+
+# Creates the expression to apply unpivot to columns that do not belong to the fixed column list. Performs the count of columns to be converted.
 def unpivot_dataframe(): 
     expression = ""
     count=0
@@ -35,7 +45,10 @@ def unpivot_dataframe():
     return expression
 expression = unpivot_dataframe()
 
+# Select the variables by passing the expression created in the unpivot_dataframe function
 df = df.select('combustivel','ano','regiao','estado',F.expr(expression))
+
+#Apply the transformations and creation of the columns requested in the challenge
 df = (
         df.withColumn('mes', F.when(F.col('mes') == 'jan',1)
                            .when(F.col('mes') == 'fev',2)
@@ -62,4 +75,6 @@ df = (
                F.col('volume'),
                F.col('created_at'))
 )
+
+# Write dataframe to s3
 df.write.mode('overwrite').parquet(path_write_s3)
