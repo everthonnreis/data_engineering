@@ -1,5 +1,5 @@
 ## ANP Fuel Sales ETL Pipeline
-Repository created to solve the "ANP Fuel Sales ETL Test".
+Repository created to solve the [ANP Fuel Sales ETL Test](https://github.com/raizen-analytics/data-engineering-test).
 
 ## Proposal
 The proposal consists in the development of an ETL pipeline to extract the pivot cache from the `xls` report [made available](http://www.anp.gov.br/dados-estatisticos) by Brazilian government's regulatory agency for oil/fuels, ANP (National Agency for Petroleum, Natural Gas and Biofuels).
@@ -9,7 +9,7 @@ The file contains pivot tables like the one below:
 ![pivot](https://user-images.githubusercontent.com/67954957/154768483-3fda5e55-81e4-4067-b74a-ab7929be3c06.png)
 
 ## Proposed solution
-The solution proposal consisted of using instances in OCI and AWS clouds to perform the entire pipeline. Below is the model that was adopted:
+The solution proposal is using instances in OCI and AWS clouds to perform the entire pipeline. Below is the model that was adopted::
 <p align="center">
 <img src="https://user-images.githubusercontent.com/67954957/154769509-60a5885c-b5ac-4ee2-a20f-5eecc65778d6.png" width="700" height="475">
 </p>
@@ -22,8 +22,8 @@ The use of OCI was for Apache Airflow services in the Docker container and proce
 * Installing the libraries in the `requirements.txt` file in the `utils_lib` folder
 
 ## Running
-The operation of the pipeline consists of executing the extract and transform scripts by airflow through `sshOperator`.
-For this execution it was necessary to transfer the access keys for the cloud instances to the `ssh_keys` folder. So when executing the dag, the `sshOperator` performs an ssh access and executes the scripts in the established order.
+The pipeline operation is the execution of the extract and transform scripts by airflow through the `sshOperator`.
+For this execution it was necessary to transfer the access keys of the cloud instances to the `ssh_keys` folder. So when running the dag, `sshOperator` performs an ssh access and executes the scripts in the established order.
 
 * In the `extract` step, the report is downloaded, converted and sent to the raw layer of s3.
 * In the `transform` step, the raw layer file is loaded through spark and the transformations to the structure requested by the challenge are carried out.
