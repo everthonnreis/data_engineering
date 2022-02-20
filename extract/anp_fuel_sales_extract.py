@@ -10,6 +10,7 @@ from os import getenv
 
 load_dotenv("/home/ubuntu/.env")
 
+# Declaration of variables
 data_source = 'anp_fuel_sales'
 bucket = getenv("AWS_BUCKET")
 today = datetime.now().strftime("%Y/%m/%d")
@@ -28,12 +29,16 @@ file_origin = url.split('/')[-1]
 
 r = requests.get(url)
 
+# Download the file and call the conversion function
 def get_file_source():
     open(url.split('/')[-1], 'wb').write(r.content)
     ConfigFunctions.convert_file(file_origin, bucket_name, logger=logger)
     os.remove(file_origin) 
 
+# Call the file download function
 get_file_source()
+
+# Calls the parquet conversion function, passing as a parameter the sheet number that contains the desired cache of the pivot table.
 ConfigFunctions.convert_parquet('sales_of_oil_derivative_fuels.parquet', 1, file_origin, bucket, bucket_name, logger)
 ConfigFunctions.convert_parquet('sales_of_diesel.parquet', 2, file_origin, bucket, bucket_name, logger)
 
