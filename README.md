@@ -38,7 +38,7 @@ Dag execution
 <img src="https://user-images.githubusercontent.com/67954957/154781353-a06bccc1-5553-4fc8-9271-12278bfd8d18.png">
 </p>
 
-Write data to s3
+Write data on s3
 <p align="center">
 <img src="https://user-images.githubusercontent.com/67954957/154781416-506912f2-4ece-42bd-bbab-4c9133db107f.png">
 </p>
